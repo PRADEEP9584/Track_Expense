@@ -56,3 +56,33 @@ res.status(500).json({
 
 
 //update an income
+export async function updateIncome(req,res){
+    const {id}=req.params;
+    const userId=req.user._id;
+    const {description, amount}=req.body;
+
+    try{
+     const updatedIncome= await incomeModel.findOneAndUpdate({
+        _id: id, userId
+     }, {description, amount}, {new:true});
+
+     if(!updatedIncome){
+        return res.status(404).json({
+           success:false,
+           message:"Income not found" 
+        })
+     }
+
+     res.json({success:true, message: "Income updated successfully.",data:updatedIncome})
+    }
+    catch(error){
+console.log(error);
+res.status(500).json({
+    success:false,
+    message:"Server Error"
+})
+    }
+}
+
+
+//to delete an income
