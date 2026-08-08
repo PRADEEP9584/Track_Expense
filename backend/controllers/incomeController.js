@@ -1,4 +1,5 @@
 import incomeModel from '../models/incomeModel.js';
+import XLSX from 'xlsx';
 
 //add income
 export async function addIncome(req,res){
@@ -111,3 +112,19 @@ res.status(500).json({
 
 
 //to download the data in excel sheet
+export async function downloadIncomeExcel(req, res){
+    const userId= req.user._id;
+    try{
+        const income=await incomeModel.find({userId}).sort
+        const plainData=income.map((inc)=>({
+            Description: inc.description,
+            Amount: inc.amount,
+            Category: inc.category,
+            Date: new Date(inc.date).toLocaleDateString(),
+        }))
+
+        const worksheet=XLSX;
+    }
+    catch(error){
+    }
+}
