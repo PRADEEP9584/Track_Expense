@@ -1,5 +1,6 @@
 import incomeModel from '../models/incomeModel.js';
 import XLSX from 'xlsx';
+import getDateRange from '../utils/dateFilter.js';
 
 //add income
 export async function addIncome(req,res){
@@ -123,8 +124,20 @@ export async function downloadIncomeExcel(req, res){
             Date: new Date(inc.date).toLocaleDateString(),
         }))
 
-        const worksheet=XLSX;
+        const worksheet=XLSX.utils.json_to_sheet(plainData);
+        const workbook=XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "incomeModel");
+        XLSX.writeFile(workbook, "income_details.xlsx");
+        res.download("income_details.xlsx");
     }
     catch(error){
+console.log(error);
+res.status(500).json({
+    success:false,
+    message:"Server Error"
+})
     }
 }
+
+
+//to get income overview
