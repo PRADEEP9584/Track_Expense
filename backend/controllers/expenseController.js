@@ -36,3 +36,21 @@ res.status(500).json({
 }
 
 //to get all expense
+export async function getAllExpense(req,res){
+    const userId=req.user._id;
+    
+        try{
+            const expense=await expenseModel.find({userId}).sort({date:-1});
+            res.json(expense);
+        }
+        catch(error){
+    console.log(error);
+    res.status(500).json({
+        success:false,
+        message:"Server Error"
+    })
+        }
+}
+
+
+//to update the expense
