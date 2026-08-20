@@ -10,13 +10,17 @@ import dashboardRouter from './routes/dashboardRoute.js';
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middlewares
-app.use(cors());
+// CORS configuration to allow all origins and credentials
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// DB Connection
-await connectDB();
+// Connect Database
+connectDB();
 
 // API Routes
 app.use("/api/user", userRouter);
@@ -28,6 +32,7 @@ app.get('/', (req, res) => {
     res.send("Track Expense API is running");
 });
 
-app.listen(port, () => {
+// Listen on all network interfaces (0.0.0.0)
+app.listen(port, "0.0.0.0", () => {
     console.log(`Server Started on http://localhost:${port}`);
 });
